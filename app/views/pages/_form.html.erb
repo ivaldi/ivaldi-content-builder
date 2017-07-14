@@ -1,0 +1,43 @@
+<%= form_for @page do |f| %>
+  <div class="row">
+    <div class="col-lg-9">
+
+        <%= f.label :title %>
+        <%= f.text_field :title %>
+
+        <% unless @page.new_record? %>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="input-group">
+                <span class="input-group-addon">https://example.com/</span>
+                <%= f.label :slug %>
+                <%= f.text_field :slug %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <hr>
+
+        <div data-ivaldi-content-blocks>
+          <%= f.fields_for :content_blocks, @page.content_blocks.sort_by{ |cb| cb.sequence } do |content_block| %>
+            <div data-content-block-wrapper>
+              <%= render 'content_block_fields', f: content_block %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="well text-center">
+          <%= link_to_add_association 'Add block', f,
+              :content_blocks,
+              'data-association-insertion-node' => '[data-ivaldi-content-blocks]',
+              'data-association-insertion-method' => 'append'
+          %>
+        </div>
+
+        <%= f.submit %>
+
+    </div>
+
+  </div>
+<% end %>

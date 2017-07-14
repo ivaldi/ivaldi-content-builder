@@ -1,0 +1,15 @@
+<% blockable_id = params[:page][:content_blocks_attributes].keys.first %>
+
+var content_block_id = <%= blockable_id %>;
+var blockable_type = '<%= params[:page][:content_blocks_attributes][blockable_id]["blockable_type"] %>';
+
+var destroy_input = jQuery('[name="page[content_blocks_attributes][' + content_block_id + '][blockable_attributes][_destroy]"][data-field-type="' + blockable_type + '"]');
+var fieldset = destroy_input.closest('[data-ivaldi-content-blocks]');
+
+destroy_input.val(0);
+destroy_input.closest('[data-content-block]').show();
+
+fieldset.find('[data-blockable-type]').hide();
+fieldset.find('[data-content-block]:hidden').remove();
+
+setCorrectOrder();
