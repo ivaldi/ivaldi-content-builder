@@ -1,3 +1,4 @@
+require 'ivaldi_content_builder/engine'
+
 module IvaldiContentBuilder
-  require 'ivaldi_content_builder/engine'
 end

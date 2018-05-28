@@ -2,7 +2,7 @@ class ContentBlock < ApplicationRecord
   belongs_to :page
   belongs_to :blockable, polymorphic: true, dependent: :destroy
 
-  accepts_nested_attributes_for :blockable, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :blockable, allow_destroy: true
   validates :blockable_type, presence: true
 
   scope :ordered, -> { order(:sequence) }

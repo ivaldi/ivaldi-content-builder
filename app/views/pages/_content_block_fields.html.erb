@@ -1,19 +1,15 @@
 <div class="nested-fields">
-  <div class="panel panel-default">
+
+  <%= render 'card_fieldset', header: capture { %>
+    <%= link_to_remove_association 'Delete', f, class: 'pull-right', title: 'Verwijder' %>
     <% if f.object.blockable_type.present? %>
-      <div class="panel-heading u-cursor-move">
-        <%= link_to_remove_association f, class: 'pull-right', title: 'Verwijder' do %>
-          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-        <% end %>
-        <h3 class="panel-title">
-          <%= t("ivaldi_content_blocks.#{f.object.blockable_type}") %>
-        </h3>
-      </div>
+      <%= t("ivaldi_content_blocks.#{f.object.blockable_type}") %>
     <% end %>
+  <% } do %>
     <div class="panel-body">
       <%= f.hidden_field :sequence, data: { sequence: true } %>
       <div data-blockable-type>
-        <% if f.object.blockable_type.nil? %>
+        <% if f.object.blockable_type.blank? %>
 
           <% items = [] %>
           <% if t('ivaldi_content_blocks').is_a? Hash %>
@@ -25,11 +21,11 @@
               :first,
               :last,
               {
-                include_blank: 'Select type',
+                include_blank: 'Kies type',
               },
               data: {
                 remote: true,
-                url: new_page_url
+                url: new_admin_page_url
               }
           %>
         <% end %>
@@ -38,7 +34,6 @@
       <% t('ivaldi_content_blocks').keys.each do |blockable_type| %>
 
         <% blockable = blockable_type.to_s.constantize.new %>
-
         <% if f.object.blockable_type == blockable_type.to_s %>
           <% blockable = f.object.blockable %>
         <% elsif f.object.blockable_type.present? %>
@@ -46,16 +41,19 @@
         <% end %>
 
         <%= f.fields_for :blockable, blockable do |ff| %>
-          <div style="display: <%= f.object.blockable_type.nil? ? 'none' : 'block' %>;" data-content-block>
-            <%= render "ivaldi_content_blocks/#{blockable_type.to_s.underscore}_fields", f: ff %>
+          <div style="display: <%= f.object.blockable_type.blank? ? 'none' : 'block' %>;" data-content-block>
+
+            <%= render "admin/#{blockable_type.to_s.underscore}_fields", f: ff %>
+
             <% unless f.object.blockable_type.blank? %>
               <%= f.hidden_field :blockable_type, value: f.object.blockable_type %>
             <% end %>
+
             <%= ff.hidden_field :_destroy, value: ff.object.new_record? ? 1 : 0, data: { 'field-type' => blockable_type } %>
           </div>
         <% end %>
 
       <% end %>
     </div>
-  </div>
+  <% end %>
 </div>
