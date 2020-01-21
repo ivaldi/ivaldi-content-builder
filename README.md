@@ -15,7 +15,7 @@ And then execute:
 ```bash
 $ bundle
 $ bin/rails g icb:install
-$ bin/rails g icb:new_block_generator ModelName field:field_type
+$ bin/rails g icb:new_block ModelName field:field_type
 ```
 
 Or install it yourself as:
